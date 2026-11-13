@@ -1,0 +1,16 @@
+.venv/
+_dow_embedded/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.pyc
+.DS_Store
+dist/
+build/
+*.egg-info/
+
+# Built by the Pages workflow from presentation/deck.html. Not committed.
+presentation/deck.pdf
+_site/

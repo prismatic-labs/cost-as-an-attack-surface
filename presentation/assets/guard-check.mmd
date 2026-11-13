@@ -1,0 +1,5 @@
+flowchart TD
+    step[Next model call or tool call] --> check{Within budget, making progress, under the hard ceiling?}
+    check -->|yes| work[Do that one unit of work]
+    work --> step
+    check -->|no| stop[Refuse it, open the circuit, return a partial answer]

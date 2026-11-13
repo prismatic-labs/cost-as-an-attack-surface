@@ -1,0 +1,9 @@
+flowchart LR
+    attacker[Attacker edits a note] -.-> note[DOC-14 with an instruction]
+    user[One benign user request] --> agent[Agent loop]
+    agent --> model[Model call]
+    model --> tools[search_notes, read_note]
+    note --> tools
+    tools --> context[Transcript grows]
+    context --> model
+    model --> cap[Agent iteration limit: partial answer]

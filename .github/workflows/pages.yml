@@ -1,0 +1,49 @@
+name: Pages
+
+# Publishes the slides. The HTML deck is the only source: every push prints it
+# to PDF and publishes the two together, so they cannot drift apart.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Print the HTML deck to PDF
+        run: python presentation/build_pdf.py
+      - name: Assemble the site
+        run: |
+          mkdir -p _site/presentation
+          cp -R site/. _site/
+          cp presentation/deck.html presentation/deck.pdf _site/presentation/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
